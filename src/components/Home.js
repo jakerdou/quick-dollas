@@ -1,12 +1,12 @@
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-// import {
-//   BrowserRouter as Router,
-//   Switch,
-//   Route,
-//   Link
-// } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 import AddExpense from './AddExpense';
 import EditCategories from './EditCategories';
@@ -25,7 +25,7 @@ function Home() {
                 <AddExpense />
             </Col>
             <Col>
-                view expenditures
+                <Link to="/expenses">View Expenses</Link>
             </Col>
         </Row>
     </Container>

@@ -8,7 +8,8 @@ import {
   Link
 } from "react-router-dom";
 
-import Home from './components/Home'
+import Home from './components/Home';
+import Expenses from './components/Expenses'
 
 import './App.css';
 
@@ -18,7 +19,8 @@ function App() {
     <Router>
       <div className='app'>
         <div>
-          Nav Bar
+          Nav Bar{' '}
+          <Link to="/">Home</Link>
         </div>
         <div>
           <Switch>
@@ -27,15 +29,13 @@ function App() {
                 about
               </div>
             </Route>
-            <Route path="/users">
+            <Route path="/expenses">
               <div>
-                users
+                <Expenses />
               </div>
             </Route>
             <Route path="/">
-              <div>
                 <Home />
-              </div>
             </Route>
           </Switch>
         </div>
