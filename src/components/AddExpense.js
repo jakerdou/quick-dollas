@@ -23,6 +23,13 @@ function AddExpense() {
         description: ''
     })
 
+    const handleChange = event => {
+        setFormState({
+            ...formState,
+            [event.target.name]: event.target.value,
+        })
+    }
+
     const handleSubmit = () => {
         console.log('amount:', formState.amount, '-- category:', formState.category, '-- description:', formState.description);
     }
