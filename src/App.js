@@ -9,7 +9,8 @@ import {
 } from "react-router-dom";
 
 import Home from './components/Home';
-import Expenses from './components/Expenses'
+import Categories from './components/Categories'
+import Expenses from './components/Expenses';
 
 import './App.css';
 
@@ -19,14 +20,15 @@ function App() {
     <Router>
       <div className='app'>
         <div>
-          Nav Bar{' '}
-          <Link to="/">Home</Link>
+          <Link to="/">Home</Link>{' '}
+          <Link to="/categories">Categories</Link>{' '}
+          <Link to='/expenses'>Expenses</Link>
         </div>
         <div>
           <Switch>
-            <Route path="/about">
+            <Route path="/categories">
               <div>
-                about
+                <Categories />
               </div>
             </Route>
             <Route path="/expenses">

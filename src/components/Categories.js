@@ -8,7 +8,7 @@ import Table from 'react-bootstrap/Table';
 
 // import './App.css';
 
-function EditCategories() {
+function Categories() {
 
     const [catToAdd, setCatToAdd] = useState({
         name: '',
@@ -107,7 +107,7 @@ function EditCategories() {
     )
 
     return (
-        <Container className='edit-categories'>
+        <Container className='categories'>
             <Row>
                 <Col>
                     categories:
@@ -124,4 +124,4 @@ function EditCategories() {
     );
 }
 
-export default EditCategories;
+export default Categories;
