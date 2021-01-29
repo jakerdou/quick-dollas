@@ -15,8 +15,6 @@ import Button from 'react-bootstrap/Button';
 
 
 function AddExpense() {
-    // TODO: at some point convert amount from string to double
-
     const fetchCategories = () => {
         fetch("http://localhost:9000/get-categories")
         .then(res => res.text())

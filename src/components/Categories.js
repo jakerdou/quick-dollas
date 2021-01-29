@@ -9,8 +9,6 @@ import Table from 'react-bootstrap/Table';
 // import './App.css';
 
 function Categories() {
-
-
     const fetchCategories = () => {
         fetch("http://localhost:9000/get-categories")
         .then(res => res.text())
