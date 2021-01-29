@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -9,35 +9,39 @@ import Table from 'react-bootstrap/Table';
 // import './App.css';
 
 function Expenses() {
-    const expenses = [
-        {
-            description: 'whata',
-            amount: 12.3,
-            category: 'food',
-            expense: true
-        },
-        {
-            description: 'paycheck',
-            amount: 567.89,
-            category: 'Being Paid',
-            expense: false
-        },
-        {
-            description: 'movies',
-            amount: 4.56,
-            category: 'entertainment',
-            expense: true
-        }
-    ]
+
+    const fetchTransactions = () => {
+        fetch("http://localhost:9000/get-transactions")
+        .then(res => res.text())
+        .then(res => setTransactions(JSON.parse(res)))
+        .catch(err => err);
+    }
+
+    const fetchCategories = () => {
+        fetch("http://localhost:9000/get-categories")
+        .then(res => res.text())
+        .then(res => setCategories(JSON.parse(res)))
+        .catch(err => err);
+    }
+
+    const [transactions, setTransactions] = useState([])
+    const [categories, setCategories] = useState([])
+    const [dummy, setDummy] = useState(0)
+
+    useEffect(() => {
+        fetchTransactions();
+        fetchCategories();
+    }, [dummy])
 
     const expenseTableBody = (
-        expenses.map(expense => {
+        transactions.map(transaction => {
+            const category = categories.find(category => category.id === transaction.category_id) || {is_expense: true}
             return (
                 <tr>
-                    <td>{expense.description}</td>
-                    <td>{'$' + expense.amount}</td>
-                    <td>{expense.category}</td>
-                    <td className={!expense.expense ? 'green': ''}>{expense.expense ? 'Expense' : 'Income'}</td>
+                    <td>{transaction.description}</td>
+                    <td>{'$' + transaction.amount}</td>
+                    <td>{transaction.category_id}</td>
+                    <td className={!category.is_expense ? 'green': ''}>{category.is_expense ? 'Expense' : 'Income'}</td>
                 </tr>
             )
         })

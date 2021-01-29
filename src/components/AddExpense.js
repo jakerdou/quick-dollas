@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -17,11 +17,37 @@ import Button from 'react-bootstrap/Button';
 function AddExpense() {
     // TODO: at some point convert amount from string to double
 
+    const fetchCategories = () => {
+        fetch("http://localhost:9000/get-categories")
+        .then(res => res.text())
+        .then(res => setCategories(JSON.parse(res)))
+        .catch(err => err);
+    }
+
+    const addTransaction = () => {
+        fetch("http://localhost:9000/add-transaction", {
+            method: 'PUT',
+            body: JSON.stringify(formState),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.text())
+        .then(res => console.log(res))
+        .catch(err => err);
+    }
+
     const [formState, setFormState] = useState({
         amount: 0,
-        category: 'Food',
+        category: null,
         description: ''
     })
+    const [categories, setCategories] = useState([])
+
+    useEffect(() => {
+        fetchCategories();
+    }, [formState])
 
     const handleChange = event => {
         setFormState({
@@ -32,34 +58,12 @@ function AddExpense() {
 
     const handleSubmit = () => {
         console.log('amount:', formState.amount, '-- category:', formState.category, '-- description:', formState.description);
+        addTransaction();
     }
-
-    const categories = [
-        {
-            name: 'Food',
-            expense: true
-        },
-        {
-            name: 'Gas',
-            expense: true
-        },
-        {
-            name: 'Entertainment',
-            expense: true
-        },
-        {
-            name: 'Misc. Want',
-            expense: true
-        },
-        {
-            name: 'Being Paid (Income)',
-            expense: false
-        },
-    ];
 
     const categoryOptions = (
         categories.map(category => {
-            return <option>{category.name}</option>
+            return <option value={category.id}>{category.name}</option>
         })
     ) 
 

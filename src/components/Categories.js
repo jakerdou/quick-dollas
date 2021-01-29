@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -10,10 +10,40 @@ import Table from 'react-bootstrap/Table';
 
 function Categories() {
 
+
+    const fetchCategories = () => {
+        fetch("http://localhost:9000/get-categories")
+        .then(res => res.text())
+        .then(res => setCategories(JSON.parse(res)))
+        .catch(err => err);
+    }
+
+    const addCategory = () => {
+        fetch("http://localhost:9000/add-category", {
+            method: 'PUT',
+            body: JSON.stringify(catToAdd),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.text())
+        .then(res => console.log(res))
+        .catch(err => err);
+    }
+    
+
+    const [categories, setCategories] = useState([])
     const [catToAdd, setCatToAdd] = useState({
         name: '',
-        expense: true
+        is_expense: true
     })
+
+    useEffect(() => {
+        fetchCategories();
+    }, [catToAdd])
+
+    console.log('cats', categories);
 
     const handleChange = event => {
         console.log(event.target.name, event.target.value);
@@ -23,35 +53,13 @@ function Categories() {
         })
     }
 
-    const categories = [
-        {
-            name: 'Food',
-            expense: true
-        },
-        {
-            name: 'Gas',
-            expense: true
-        },
-        {
-            name: 'Entertainment',
-            expense: true
-        },
-        {
-            name: 'Misc. Want',
-            expense: true
-        },
-        {
-            name: 'Being Paid (Income)',
-            expense: false
-        },
-    ];
-
     const catTableBody = (
         categories.map(category => {
             return (
                 <tr>
+                    <td>{category.id}</td>
                     <td>{category.name}</td>
-                    <td>{category.expense ? 'Expense' : 'Income'}</td>
+                    <td>{category.is_expense ? 'Expense' : 'Income'}</td>
                 </tr>
             )
             
@@ -62,6 +70,7 @@ function Categories() {
         <Table striped bordered hover>
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Category</th>
                     <th>Type</th>
                 </tr>
@@ -73,7 +82,8 @@ function Categories() {
     )
 
     const handleSubmit = () => {
-        console.log('name:', catToAdd.name, '-- expense:', catToAdd.expense);
+        console.log('name:', catToAdd.name, '-- expense:', catToAdd.is_expense);
+        addCategory();
     }
 
     const addCatForm = (
@@ -93,8 +103,8 @@ function Categories() {
                     <Form.Label>Type</Form.Label>
                     <Form.Control 
                         as="select"
-                        value={catToAdd.expense} 
-                        name='expense' 
+                        value={catToAdd.is_expense} 
+                        name='is_expense' 
                         onChange={handleChange}
                     >
                         <option value={true}>Expense</option>
@@ -110,7 +120,7 @@ function Categories() {
         <Container className='categories'>
             <Row>
                 <Col>
-                    categories:
+                    Categories:
                     {catTable}
                 </Col>
             </Row>
