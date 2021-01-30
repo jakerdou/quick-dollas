@@ -39,13 +39,14 @@ function AddExpense() {
     const [formState, setFormState] = useState({
         amount: 0,
         category: null,
+        date: null,
         description: ''
     })
     const [categories, setCategories] = useState([])
 
     useEffect(() => {
         fetchCategories();
-    }, [formState])
+    }, [])
 
     const handleChange = event => {
         setFormState({
@@ -90,6 +91,16 @@ function AddExpense() {
                             >
                                 {categoryOptions}
                             </Form.Control>
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Label>Date</Form.Label>
+                            <Form.Control
+                                type="text"
+                                value={formState.date} 
+                                name='date' 
+                                onChange={handleChange}
+                                placeholder="YEAR-MONTH-DAY"
+                            />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Description</Form.Label>

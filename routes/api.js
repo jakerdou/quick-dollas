@@ -34,13 +34,17 @@ router.get("/get-categories", function(req, res, next) {
         })
 });
 
-// trasactions
-router.get("/get-transactions", function(req, res, next) {
+// POST
+// transactions
+router.post("/get-transactions", function(req, res, next) {
+    console.log(req.body)
+    const query_str = 'SELECT * FROM transactions WHERE date >= $1 AND date <= $2 AND user_id = $3'
+    const values = [req.body.start, req.body.end, 123]
     pool
         .connect()
         .then(client => {
             return client
-            .query('SELECT * FROM transactions')
+            .query(query_str, values)
             .then(response => {
                 client.release()
                 console.log('SUCCESS - get-transactions')
@@ -79,8 +83,8 @@ router.put("/add-category", function(req, res, next) {
 
 // transactions
 router.put("/add-transaction", function(req, res, next) {
-    const query_str = 'INSERT INTO transactions (user_id, category_id, amount, description) VALUES ($1, $2, $3, $4)'
-    const values = [123, req.body.category, req.body.amount, req.body.description]
+    const query_str = 'INSERT INTO transactions (user_id, category_id, amount, description, date) VALUES ($1, $2, $3, $4, $5)'
+    const values = [123, req.body.category, req.body.amount, req.body.description, req.body.date]
     pool
         .connect()
         .then(client => {
@@ -93,9 +97,12 @@ router.put("/add-transaction", function(req, res, next) {
             })
             .catch(err => {
                 client.release()
-                console.log('FAILURE - add-transaction', err.stack)
+                console.log('FAILURE - add-transaction')
+                console.log(err.stack)
             })
         })
 });
+
+
 
 module.exports = router;

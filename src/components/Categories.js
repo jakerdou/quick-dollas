@@ -39,7 +39,7 @@ function Categories() {
 
     useEffect(() => {
         fetchCategories();
-    }, [catToAdd])
+    }, [])
 
     console.log('cats', categories);
 

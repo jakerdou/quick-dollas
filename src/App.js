@@ -9,8 +9,9 @@ import {
 } from "react-router-dom";
 
 import Home from './components/Home';
-import Categories from './components/Categories'
+import Categories from './components/Categories';
 import Expenses from './components/Expenses';
+import Tracker from './components/Tracker';
 
 import './App.css';
 
@@ -23,7 +24,8 @@ function App() {
         <div>
           <Link to="/">Home</Link>{' '}
           <Link to="/categories">Categories</Link>{' '}
-          <Link to='/expenses'>Expenses</Link>
+          <Link to='/expenses'>Expenses</Link>{' '}
+          <Link to='/tracker'>Tracker</Link>
         </div>
         <div>
           <Switch>
@@ -35,6 +37,11 @@ function App() {
             <Route path="/expenses">
               <div>
                 <Expenses />
+              </div>
+            </Route>
+            <Route path="/tracker">
+              <div>
+                <Tracker />
               </div>
             </Route>
             <Route path="/">
