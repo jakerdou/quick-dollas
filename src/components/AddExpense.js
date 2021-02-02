@@ -36,13 +36,22 @@ function AddExpense() {
         .catch(err => err);
     }
 
+    var today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    const yyyy = today.getFullYear();
+
+    today = yyyy + '-' + mm + '-' + dd;
+
+    const [categories, setCategories] = useState([])
     const [formState, setFormState] = useState({
         amount: 0,
         category: null,
-        date: null,
+        date: today,
         description: ''
     })
-    const [categories, setCategories] = useState([])
+
+    // TODO: maybe use a setTimeout to set the default category
 
     useEffect(() => {
         fetchCategories();

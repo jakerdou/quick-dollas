@@ -1,2 +1,1 @@
-set default dates to current 1-15 or 15-endOfMonth period 
-Need to implement the google OAuth thing
+Link to plaid and have suggested transactions, check date of transaction and if there isn't a transaction of that amount within 10 days of when it went through, flag it

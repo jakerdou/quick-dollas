@@ -8,6 +8,8 @@ import Table from 'react-bootstrap/Table';
 
 // import './App.css';
 
+const numDaysinMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
 function Expenses() {
 
     const fetchTransactions = () => {
@@ -31,12 +33,47 @@ function Expenses() {
         .catch(err => err);
     }
 
-    const [transactions, setTransactions] = useState([])
-    const [categories, setCategories] = useState([])
-    const [dates, setDates] = useState({
-        start: '1970-01-01',
-        end: '2100-12-31'
-    })
+    const deleteTransaction = (id) => {
+        fetch("http://localhost:9000/delete-transaction", {
+            method: 'DELETE',
+            body: JSON.stringify({id}),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.text())
+        .then(res => console.log(res))
+        .catch(err => err);
+    }
+
+    const getStartEnd = () => {
+        var today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        const yyyy = today.getFullYear();
+
+        today = yyyy + '-' + mm + '-' + dd;
+
+        if (parseInt(dd) <= 15) {
+            return {
+                start: yyyy + '-' + mm + '-' + '01',
+                end: yyyy + '-' + mm + '-' + '15'
+            }
+        }
+        else {
+            const lastDayOfMonth = String(numDaysinMonth[parseInt(mm) - 1])
+            return {
+                start: yyyy + '-' + mm + '-' + '15',
+                end: yyyy + '-' + mm + '-' + lastDayOfMonth
+            }
+        }
+    }    
+
+    const [transactions, setTransactions] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [dates, setDates] = useState(getStartEnd());
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         fetchTransactions();
@@ -51,8 +88,18 @@ function Expenses() {
     }
 
     const handleSubmit = () => {
-        console.log('submitted', dates);
         fetchTransactions();
+        fetchCategories();
+    }
+
+    const handleDelete = event => {
+        deleteTransaction(event.target.id)
+        setLoading(true);
+        setTimeout(() => {  
+            fetchCategories(); 
+            fetchTransactions();
+            setLoading(false); 
+        }, 1000);
     }
 
     const dateInput = (
@@ -86,7 +133,6 @@ function Expenses() {
     const expenseTableBody = (
         transactions.map(transaction => {
             const category = categories.find(category => category.id === transaction.category_id) || {is_expense: true}
-            console.log('date', transaction.date, typeof transaction.date);
             return (
                 <tr>
                     <td>{transaction.description}</td>
@@ -94,6 +140,7 @@ function Expenses() {
                     <td>{category.name}</td>
                     <td>{transaction.date && transaction.date.substring(0, 10)}</td>
                     <td className={!category.is_expense ? 'green': ''}>{category.is_expense ? 'Expense' : 'Income'}</td>
+                    <td><Button onClick={handleDelete} id={transaction.id}>DELETE</Button></td>
                 </tr>
             )
         })
@@ -108,6 +155,7 @@ function Expenses() {
                     <th>Category</th>
                     <th>Date</th>
                     <th>Type</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -119,7 +167,8 @@ function Expenses() {
     const summary = () => {
         let totalSpent = 0 
         transactions.forEach(transaction => {
-            totalSpent += transaction.amount
+            const category = categories.find(category => category.id === transaction.category_id) || {is_expense: true}
+            category.is_expense? totalSpent += transaction.amount : totalSpent -= transaction.amount 
         })
         return (
             <div>
@@ -132,6 +181,7 @@ function Expenses() {
         <Container className='edit-categories'>
             <Row>
                 <Col>
+                    {loading ? <div>*LOADING*</div> : null}
                     {dateInput}
                 </Col>
             </Row>

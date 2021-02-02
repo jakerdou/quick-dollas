@@ -17,6 +17,7 @@ const pool = new Pool({
 // GET
 // categories
 router.get("/get-categories", function(req, res, next) {
+    // TODO: put this pool.connect whole thing in its own function
     pool
         .connect()
         .then(client => {
@@ -103,6 +104,47 @@ router.put("/add-transaction", function(req, res, next) {
         })
 });
 
+// DELETE
+// categories
+router.delete("/delete-category", function(req, res, next) {
+    const query_str = 'DELETE FROM categories WHERE id = $1'
+    const values = [req.body.id]
+    pool
+        .connect()
+        .then(client => {
+            return client
+            .query(query_str, values)
+            .then(response => {
+                client.release()
+                console.log('SUCCESS - delete-category')
+                res.send(response)
+            })
+            .catch(err => {
+                client.release()
+                console.log('FAILURE - delete-category', err.stack)
+            })
+        })
+});
 
+// transactions
+router.delete("/delete-transaction", function(req, res, next) {
+    const query_str = 'DELETE FROM transactions WHERE id = $1'
+    const values = [req.body.id]
+    pool
+        .connect()
+        .then(client => {
+            return client
+            .query(query_str, values)
+            .then(response => {
+                client.release()
+                console.log('SUCCESS - delete-transaction')
+                res.send(response)
+            })
+            .catch(err => {
+                client.release()
+                console.log('FAILURE - delete-transaction', err.stack)
+            })
+        })
+});
 
 module.exports = router;

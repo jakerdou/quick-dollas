@@ -1,6 +1,8 @@
+import { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import GoogleLogin from 'react-google-login';
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,44 +13,68 @@ import {
 import Home from './components/Home';
 import Categories from './components/Categories';
 import Expenses from './components/Expenses';
-import Tracker from './components/Tracker';
 
 import './App.css';
 
-
 function App() {
-  return (
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [name, setName] = useState();
 
+  const onSignIn = googleUser => {
+    console.log('in function');
+    console.log('user', googleUser);
+    var profile = googleUser.getBasicProfile();
+    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log('Name: ' + profile.getName());
+    console.log('Image URL: ' + profile.getImageUrl());
+    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+    setIsLoggedIn(true)
+    setName(profile.getName());
+  }
+
+  return (
     <Router>
       <div className='app'>
-        <div>
-          <Link to="/">Home</Link>{' '}
-          <Link to="/categories">Categories</Link>{' '}
-          <Link to='/expenses'>Expenses</Link>{' '}
-          <Link to='/tracker'>Tracker</Link>
-        </div>
-        <div>
-          <Switch>
-            <Route path="/categories">
+        <GoogleLogin
+          clientId="180544136485-bildtjala9v81f48f6uq90epp6l7dhnt.apps.googleusercontent.com"
+          buttonText={isLoggedIn ? name + " is signed in" : "Login with Google"}
+          onSuccess={onSignIn}
+          onFailure={error => console.log('error with google stuff', error)}
+          /* cookiePolicy={'single_host_origin'} */
+        >
+        </GoogleLogin>
+        <div>{name ? null : 'Please sign in to use the app'}</div>
+        {
+          isLoggedIn
+          ? (
+            <>
               <div>
-                <Categories />
+                <Link to="/">Home</Link>{' '}
+                <Link to="/categories">Categories</Link>{' '}
+                <Link to='/expenses'>Expenses</Link>{' '}
               </div>
-            </Route>
-            <Route path="/expenses">
               <div>
-                <Expenses />
+                <Switch>
+                  <Route path="/categories">
+                    <div>
+                      <Categories />
+                    </div>
+                  </Route>
+                  <Route path="/expenses">
+                    <div>
+                      <Expenses />
+                    </div>
+                  </Route>
+                  <Route path="/">
+                      <Home />
+                  </Route>
+                </Switch>
               </div>
-            </Route>
-            <Route path="/tracker">
-              <div>
-                <Tracker />
-              </div>
-            </Route>
-            <Route path="/">
-                <Home />
-            </Route>
-          </Switch>
-        </div>
+            </>
+          )
+          : null
+        }
+        
       </div>
     </Router>
     
