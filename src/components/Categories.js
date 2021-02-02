@@ -8,9 +8,17 @@ import Table from 'react-bootstrap/Table';
 
 // import './App.css';
 
-function Categories() {
+function Categories({ userID }) {
     const fetchCategories = () => {
-        fetch("http://localhost:9000/get-categories")
+        console.log('id in fetch', userID);
+        fetch("http://localhost:9000/get-categories", {
+            method: 'POST',
+            body: JSON.stringify({user_id: userID}),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
         .then(res => res.text())
         .then(res => setCategories(JSON.parse(res)))
         .catch(err => err);
@@ -47,13 +55,14 @@ function Categories() {
     const [categories, setCategories] = useState([]);
     const [catToAdd, setCatToAdd] = useState({
         name: '',
-        is_expense: true
+        is_expense: true,
+        user_id: userID
     });
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         fetchCategories();
-    }, [])
+    }, [userID])
 
     const handleChange = event => {
         console.log(event.target.name, event.target.value);
@@ -76,7 +85,7 @@ function Categories() {
     const catTableBody = (
         categories.map(category => {
             return (
-                <tr>
+                <tr key={category.id}>
                     <td>{category.name}</td>
                     <td>{category.is_expense ? 'Expense' : 'Income'}</td>
                     <td><Button onClick={handleDelete} id={category.id}>DELETE</Button></td>

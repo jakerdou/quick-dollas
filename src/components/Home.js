@@ -13,12 +13,12 @@ import AddExpense from './AddExpense';
 // import './App.css';
 
 
-function Home() {
+function Home({ userID }) {
   return (
     <Container className='home'>
         <Row>
             <Col>
-                <AddExpense />
+                <AddExpense userID={userID}/>
             </Col>
         </Row>
     </Container>

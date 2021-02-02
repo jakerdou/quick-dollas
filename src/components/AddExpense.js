@@ -14,9 +14,18 @@ import Button from 'react-bootstrap/Button';
 // import './App.css';
 
 
-function AddExpense() {
+function AddExpense({ userID }) {
+
     const fetchCategories = () => {
-        fetch("http://localhost:9000/get-categories")
+        console.log('id in fetch', userID);
+        fetch("http://localhost:9000/get-categories", {
+            method: 'POST',
+            body: JSON.stringify({user_id: userID}),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
         .then(res => res.text())
         .then(res => setCategories(JSON.parse(res)))
         .catch(err => err);
@@ -25,7 +34,10 @@ function AddExpense() {
     const addTransaction = () => {
         fetch("http://localhost:9000/add-transaction", {
             method: 'PUT',
-            body: JSON.stringify(formState),
+            body: JSON.stringify({
+                trans_info: transactionInfo, 
+                user_id: userID
+            }),
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -44,7 +56,7 @@ function AddExpense() {
     today = yyyy + '-' + mm + '-' + dd;
 
     const [categories, setCategories] = useState([])
-    const [formState, setFormState] = useState({
+    const [transactionInfo, setTransactionInfo] = useState({
         amount: 0,
         category: null,
         date: today,
@@ -55,23 +67,23 @@ function AddExpense() {
 
     useEffect(() => {
         fetchCategories();
-    }, [])
+    }, [userID])
 
     const handleChange = event => {
-        setFormState({
-            ...formState,
+        setTransactionInfo({
+            ...transactionInfo,
             [event.target.name]: event.target.value,
         })
     }
 
     const handleSubmit = () => {
-        console.log('amount:', formState.amount, '-- category:', formState.category, '-- description:', formState.description);
+        console.log('amount:', transactionInfo.amount, '-- category:', transactionInfo.category, '-- description:', transactionInfo.description);
         addTransaction();
     }
 
     const categoryOptions = (
         categories.map(category => {
-            return <option value={category.id}>{category.name}</option>
+            return <option key={category.id} value={category.id}>{category.name}</option>
         })
     ) 
 
@@ -85,7 +97,7 @@ function AddExpense() {
                             <Form.Label>Amount</Form.Label>
                             <Form.Control 
                                 type="number" 
-                                value={formState.amount} 
+                                value={transactionInfo.amount} 
                                 name='amount' 
                                 onChange={handleChange}
                             />
@@ -94,7 +106,7 @@ function AddExpense() {
                             <Form.Label>Category</Form.Label>
                             <Form.Control 
                                 as="select"
-                                value={formState.category} 
+                                value={transactionInfo.category} 
                                 name='category' 
                                 onChange={handleChange}
                             >
@@ -105,7 +117,7 @@ function AddExpense() {
                             <Form.Label>Date</Form.Label>
                             <Form.Control
                                 type="text"
-                                value={formState.date} 
+                                value={transactionInfo.date} 
                                 name='date' 
                                 onChange={handleChange}
                                 placeholder="YEAR-MONTH-DAY"
@@ -115,7 +127,7 @@ function AddExpense() {
                             <Form.Label>Description</Form.Label>
                             <Form.Control
                                 type="text"
-                                value={formState.description} 
+                                value={transactionInfo.description} 
                                 name='description' 
                                 onChange={handleChange}
                                 placeholder="desc"

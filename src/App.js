@@ -18,19 +18,27 @@ import './App.css';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userID, setUserID] = useState();
   const [name, setName] = useState();
 
   const onSignIn = googleUser => {
     console.log('in function');
     console.log('user', googleUser);
     var profile = googleUser.getBasicProfile();
-    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-    console.log('Name: ' + profile.getName());
-    console.log('Image URL: ' + profile.getImageUrl());
-    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+    // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    // console.log('Name: ' + profile.getName());
+    // console.log('Image URL: ' + profile.getImageUrl());
+    // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+    console.log('res ', googleUser.getAuthResponse());
+    console.log('token', googleUser.getAuthResponse().id_token);
+
     setIsLoggedIn(true)
+    setUserID(profile.getId());
     setName(profile.getName());
   }
+
+  console.log('id in app', userID);
 
   return (
     <Router>
@@ -40,7 +48,8 @@ function App() {
           buttonText={isLoggedIn ? name + " is signed in" : "Login with Google"}
           onSuccess={onSignIn}
           onFailure={error => console.log('error with google stuff', error)}
-          /* cookiePolicy={'single_host_origin'} */
+          cookiePolicy={'single_host_origin'}
+          isSignedIn={true}
         >
         </GoogleLogin>
         <div>{name ? null : 'Please sign in to use the app'}</div>
@@ -57,16 +66,16 @@ function App() {
                 <Switch>
                   <Route path="/categories">
                     <div>
-                      <Categories />
+                      <Categories userID={userID}/>
                     </div>
                   </Route>
                   <Route path="/expenses">
                     <div>
-                      <Expenses />
+                      <Expenses userID={userID}/>
                     </div>
                   </Route>
                   <Route path="/">
-                      <Home />
+                      <Home userID={userID}/>
                   </Route>
                 </Switch>
               </div>

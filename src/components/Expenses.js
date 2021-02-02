@@ -10,12 +10,16 @@ import Table from 'react-bootstrap/Table';
 
 const numDaysinMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-function Expenses() {
+function Expenses({ userID }) {
 
     const fetchTransactions = () => {
         fetch("http://localhost:9000/get-transactions", {
             method: 'POST',
-            body: JSON.stringify(dates),
+            body: JSON.stringify({
+                start: dates.start, 
+                end: dates.end, 
+                user_id: userID
+            }),
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -27,7 +31,14 @@ function Expenses() {
     }
 
     const fetchCategories = () => {
-        fetch("http://localhost:9000/get-categories")
+        fetch("http://localhost:9000/get-categories", {
+            method: 'POST',
+            body: JSON.stringify({user_id: userID}),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
         .then(res => res.text())
         .then(res => setCategories(JSON.parse(res)))
         .catch(err => err);
@@ -78,7 +89,7 @@ function Expenses() {
     useEffect(() => {
         fetchTransactions();
         fetchCategories();
-    }, [])
+    }, [userID])
 
     const handleChange = event => {
         setDates({
@@ -134,7 +145,7 @@ function Expenses() {
         transactions.map(transaction => {
             const category = categories.find(category => category.id === transaction.category_id) || {is_expense: true}
             return (
-                <tr>
+                <tr key={transaction.id}>
                     <td>{transaction.description}</td>
                     <td>{'$' + transaction.amount}</td>
                     <td>{category.name}</td>
