@@ -18,7 +18,7 @@ function AddExpense({ userID }) {
 
     const fetchCategories = () => {
         console.log('id in fetch', userID);
-        fetch("http://localhost:9000/get-categories", {
+        fetch("http://18.220.140.183:9000/get-categories", {
             method: 'POST',
             body: JSON.stringify({user_id: userID}),
             headers: {
@@ -32,10 +32,10 @@ function AddExpense({ userID }) {
     }
 
     const addTransaction = () => {
-        fetch("http://localhost:9000/add-transaction", {
+        fetch("http://18.220.140.183:9000/add-transaction", {
             method: 'PUT',
             body: JSON.stringify({
-                trans_info: transactionInfo, 
+                trans_info: transactionInfo,
                 user_id: userID
             }),
             headers: {
@@ -85,7 +85,7 @@ function AddExpense({ userID }) {
         categories.map(category => {
             return <option key={category.id} value={category.id}>{category.name}</option>
         })
-    ) 
+    )
 
     return (
         <Container className='add-expense'>
@@ -95,19 +95,19 @@ function AddExpense({ userID }) {
                     <Form>
                         <Form.Group>
                             <Form.Label>Amount</Form.Label>
-                            <Form.Control 
-                                type="number" 
-                                value={transactionInfo.amount} 
-                                name='amount' 
+                            <Form.Control
+                                type="number"
+                                value={transactionInfo.amount}
+                                name='amount'
                                 onChange={handleChange}
                             />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Category</Form.Label>
-                            <Form.Control 
+                            <Form.Control
                                 as="select"
-                                value={transactionInfo.category} 
-                                name='category' 
+                                value={transactionInfo.category}
+                                name='category'
                                 onChange={handleChange}
                             >
                                 {categoryOptions}
@@ -117,8 +117,8 @@ function AddExpense({ userID }) {
                             <Form.Label>Date</Form.Label>
                             <Form.Control
                                 type="text"
-                                value={transactionInfo.date} 
-                                name='date' 
+                                value={transactionInfo.date}
+                                name='date'
                                 onChange={handleChange}
                                 placeholder="YEAR-MONTH-DAY"
                             />
@@ -127,8 +127,8 @@ function AddExpense({ userID }) {
                             <Form.Label>Description</Form.Label>
                             <Form.Control
                                 type="text"
-                                value={transactionInfo.description} 
-                                name='description' 
+                                value={transactionInfo.description}
+                                name='description'
                                 onChange={handleChange}
                                 placeholder="desc"
                             />
