@@ -18,7 +18,7 @@ function AddExpense({ userID }) {
 
     const fetchCategories = () => {
         console.log('id in fetch', userID);
-        fetch("http://18.220.140.183:9000/get-categories", {
+        fetch("https://18.220.140.183:9000/get-categories", {
             method: 'POST',
             body: JSON.stringify({user_id: userID}),
             headers: {
@@ -32,7 +32,7 @@ function AddExpense({ userID }) {
     }
 
     const addTransaction = () => {
-        fetch("http://18.220.140.183:9000/add-transaction", {
+        fetch("https://18.220.140.183:9000/add-transaction", {
             method: 'PUT',
             body: JSON.stringify({
                 trans_info: transactionInfo,

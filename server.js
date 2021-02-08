@@ -6,11 +6,6 @@ var cors = require("cors");
 const port = process.env.PORT || 9000;
 require('dotenv').config();
 
-
-const token = process.env.BEARER_TOKEN;  
-const rulesURL = 'https://api.twitter.com/2/tweets/search/stream/rules'
-const streamURL = 'https://api.twitter.com/2/tweets/search/stream';
-
 // Create Routers
 var apiRouter = require("./routes/api");
 

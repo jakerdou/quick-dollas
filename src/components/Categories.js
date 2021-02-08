@@ -11,7 +11,7 @@ import Table from 'react-bootstrap/Table';
 function Categories({ userID }) {
     const fetchCategories = () => {
         console.log('id in fetch', userID);
-        fetch("http://18.220.140.183:9000/get-categories", {
+        fetch("https://18.220.140.183:9000/get-categories", {
             method: 'POST',
             body: JSON.stringify({user_id: userID}),
             headers: {
@@ -25,7 +25,7 @@ function Categories({ userID }) {
     }
 
     const addCategory = () => {
-        fetch("http://18.220.140.183:9000/add-category", {
+        fetch("https://18.220.140.183:9000/add-category", {
             method: 'PUT',
             body: JSON.stringify(catToAdd),
             headers: {
@@ -39,7 +39,7 @@ function Categories({ userID }) {
     }
 
     const deleteCategory = (id) => {
-        fetch("http://18.220.140.183:9000/delete-category", {
+        fetch("https://18.220.140.183:9000/delete-category", {
             method: 'DELETE',
             body: JSON.stringify({id}),
             headers: {

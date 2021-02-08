@@ -13,7 +13,7 @@ const numDaysinMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 function Expenses({ userID }) {
 
     const fetchTransactions = () => {
-        fetch("http://18.220.140.183:9000/get-transactions", {
+        fetch("https://18.220.140.183:9000/get-transactions", {
             method: 'POST',
             body: JSON.stringify({
                 start: dates.start, 
@@ -31,7 +31,7 @@ function Expenses({ userID }) {
     }
 
     const fetchCategories = () => {
-        fetch("http://18.220.140.183:9000/get-categories", {
+        fetch("https://18.220.140.183:9000/get-categories", {
             method: 'POST',
             body: JSON.stringify({user_id: userID}),
             headers: {
@@ -45,7 +45,7 @@ function Expenses({ userID }) {
     }
 
     const deleteTransaction = (id) => {
-        fetch("http://18.220.140.183:9000/delete-transaction", {
+        fetch("https://18.220.140.183:9000/delete-transaction", {
             method: 'DELETE',
             body: JSON.stringify({id}),
             headers: {
