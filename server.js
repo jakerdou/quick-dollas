@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 var cors = require("cors");
-const port = process.env.PORT || 9000;
+const port = 443;
 require('dotenv').config();
 
 // Create Routers
