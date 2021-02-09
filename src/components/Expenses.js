@@ -15,7 +15,7 @@ const numDaysinMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 function Expenses({ userID }) {
 
     const fetchTransactions = () => {
-        fetch(`http://${config.backend_url}/get-transactions`, {
+        fetch(`${config.backend_url}/get-transactions`, {
             method: 'POST',
             body: JSON.stringify({
                 start: dates.start,
@@ -33,7 +33,7 @@ function Expenses({ userID }) {
     }
 
     const fetchCategories = () => {
-        fetch(`http://${config.backend_url}/get-categories`, {
+        fetch(`${config.backend_url}/get-categories`, {
             method: 'POST',
             body: JSON.stringify({user_id: userID}),
             headers: {
@@ -47,7 +47,7 @@ function Expenses({ userID }) {
     }
 
     const deleteTransaction = (id) => {
-        fetch(`http://${config.backend_url}/delete-transaction`, {
+        fetch(`${config.backend_url}/delete-transaction`, {
             method: 'DELETE',
             body: JSON.stringify({id}),
             headers: {

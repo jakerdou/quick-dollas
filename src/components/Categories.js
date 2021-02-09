@@ -13,7 +13,7 @@ const config = require('../frontend-config.json');
 function Categories({ userID }) {
     const fetchCategories = () => {
         console.log('id in fetch', userID);
-        fetch(`http://${config.backend_url}/get-categories`, {
+        fetch(`${config.backend_url}/get-categories`, {
             method: 'POST',
             body: JSON.stringify({user_id: userID}),
             headers: {
@@ -27,7 +27,7 @@ function Categories({ userID }) {
     }
 
     const addCategory = () => {
-        fetch(`http://${config.backend_url}/add-category`, {
+        fetch(`${config.backend_url}/add-category`, {
             method: 'PUT',
             body: JSON.stringify(catToAdd),
             headers: {
@@ -41,7 +41,7 @@ function Categories({ userID }) {
     }
 
     const deleteCategory = (id) => {
-        fetch(`http://${config.backend_url}/delete-category`, {
+        fetch(`${config.backend_url}/delete-category`, {
             method: 'DELETE',
             body: JSON.stringify({id}),
             headers: {

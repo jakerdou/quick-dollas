@@ -19,7 +19,7 @@ function AddExpense({ userID }) {
 
     const fetchCategories = () => {
         console.log('id in fetch', userID);
-        fetch(`http://${config.backend_url}/get-categories`, {
+        fetch(`${config.backend_url}/get-categories`, {
             method: 'POST',
             body: JSON.stringify({user_id: userID}),
             headers: {
@@ -33,7 +33,7 @@ function AddExpense({ userID }) {
     }
 
     const addTransaction = () => {
-        fetch(`http://${config.backend_url}/add-transaction`, {
+        fetch(`${config.backend_url}/add-transaction`, {
             method: 'PUT',
             body: JSON.stringify({
                 trans_info: transactionInfo,
