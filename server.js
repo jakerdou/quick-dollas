@@ -3,11 +3,12 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 var cors = require("cors");
-const port = process.env.PORT || 9000;
+const config = require("server-config.json");
+const port = config.port;
 require('dotenv').config();
 
 
-const token = process.env.BEARER_TOKEN;  
+const token = process.env.BEARER_TOKEN;
 const rulesURL = 'https://api.twitter.com/2/tweets/search/stream/rules'
 const streamURL = 'https://api.twitter.com/2/tweets/search/stream';
 
