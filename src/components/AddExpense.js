@@ -13,12 +13,13 @@ import Button from 'react-bootstrap/Button';
 
 // import './App.css';
 
+const config = require('../frontend-config.json');
 
 function AddExpense({ userID }) {
 
     const fetchCategories = () => {
         console.log('id in fetch', userID);
-        fetch("https://18.220.140.183:443/get-categories", {
+        fetch(`http://${config.backend_url}/get-categories`, {
             method: 'POST',
             body: JSON.stringify({user_id: userID}),
             headers: {
@@ -32,7 +33,7 @@ function AddExpense({ userID }) {
     }
 
     const addTransaction = () => {
-        fetch("https://18.220.140.183:443/add-transaction", {
+        fetch(`http://${config.backend_url}/add-transaction`, {
             method: 'PUT',
             body: JSON.stringify({
                 trans_info: transactionInfo,
@@ -91,9 +92,9 @@ function AddExpense({ userID }) {
         <Container className='add-expense'>
             <Row>
                 <Col>
-                    add expense
-                    <Form>
-                        <Form.Group>
+                    <span className="page-title">Add Transaction</span>
+                    <Form className="mt-3 mx-4">
+                        <Form.Group className="mt-4">
                             <Form.Label>Amount</Form.Label>
                             <Form.Control
                                 type="number"
@@ -102,7 +103,7 @@ function AddExpense({ userID }) {
                                 onChange={handleChange}
                             />
                         </Form.Group>
-                        <Form.Group>
+                        <Form.Group className="mt-4">
                             <Form.Label>Category</Form.Label>
                             <Form.Control
                                 as="select"
@@ -113,7 +114,7 @@ function AddExpense({ userID }) {
                                 {categoryOptions}
                             </Form.Control>
                         </Form.Group>
-                        <Form.Group>
+                        <Form.Group className="mt-4">
                             <Form.Label>Date</Form.Label>
                             <Form.Control
                                 type="text"
@@ -123,7 +124,7 @@ function AddExpense({ userID }) {
                                 placeholder="YEAR-MONTH-DAY"
                             />
                         </Form.Group>
-                        <Form.Group>
+                        <Form.Group className="mt-4">
                             <Form.Label>Description</Form.Label>
                             <Form.Control
                                 type="text"

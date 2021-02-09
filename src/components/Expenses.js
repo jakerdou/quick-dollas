@@ -8,16 +8,18 @@ import Table from 'react-bootstrap/Table';
 
 // import './App.css';
 
+const config = require('../frontend-config.json');
+
 const numDaysinMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 function Expenses({ userID }) {
 
     const fetchTransactions = () => {
-        fetch("https://18.220.140.183:443/get-transactions", {
+        fetch(`http://${config.backend_url}/get-transactions`, {
             method: 'POST',
             body: JSON.stringify({
-                start: dates.start, 
-                end: dates.end, 
+                start: dates.start,
+                end: dates.end,
                 user_id: userID
             }),
             headers: {
@@ -31,7 +33,7 @@ function Expenses({ userID }) {
     }
 
     const fetchCategories = () => {
-        fetch("https://18.220.140.183:443/get-categories", {
+        fetch(`http://${config.backend_url}/get-categories`, {
             method: 'POST',
             body: JSON.stringify({user_id: userID}),
             headers: {
@@ -45,7 +47,7 @@ function Expenses({ userID }) {
     }
 
     const deleteTransaction = (id) => {
-        fetch("https://18.220.140.183:443/delete-transaction", {
+        fetch(`http://${config.backend_url}/delete-transaction`, {
             method: 'DELETE',
             body: JSON.stringify({id}),
             headers: {
@@ -79,7 +81,7 @@ function Expenses({ userID }) {
                 end: yyyy + '-' + mm + '-' + lastDayOfMonth
             }
         }
-    }    
+    }
 
     const [transactions, setTransactions] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -106,10 +108,10 @@ function Expenses({ userID }) {
     const handleDelete = event => {
         deleteTransaction(event.target.id)
         setLoading(true);
-        setTimeout(() => {  
-            fetchCategories(); 
+        setTimeout(() => {
+            fetchCategories();
             fetchTransactions();
-            setLoading(false); 
+            setLoading(false);
         }, 1000);
     }
 
@@ -120,8 +122,8 @@ function Expenses({ userID }) {
                     <Form.Label>Start</Form.Label>
                     <Form.Control
                         type="text"
-                        value={dates.start} 
-                        name='start' 
+                        value={dates.start}
+                        name='start'
                         onChange={handleChange}
                         placeholder="YEAR-MONTH-DAY"
                     />
@@ -130,8 +132,8 @@ function Expenses({ userID }) {
                     <Form.Label>End</Form.Label>
                     <Form.Control
                         type="text"
-                        value={dates.end} 
-                        name='end' 
+                        value={dates.end}
+                        name='end'
                         onChange={handleChange}
                         placeholder="YEAR-MONTH-DAY"
                     />
@@ -176,10 +178,10 @@ function Expenses({ userID }) {
     )
 
     const summary = () => {
-        let totalSpent = 0 
+        let totalSpent = 0
         transactions.forEach(transaction => {
             const category = categories.find(category => category.id === transaction.category_id) || {is_expense: true}
-            category.is_expense? totalSpent += transaction.amount : totalSpent -= transaction.amount 
+            category.is_expense? totalSpent += transaction.amount : totalSpent -= transaction.amount
         })
         return (
             <div>
@@ -191,18 +193,24 @@ function Expenses({ userID }) {
     return (
         <Container className='edit-categories'>
             <Row>
+                <Col className="page-title">
+                    Transactions
+                </Col>
+            </Row>
+            <Row className="mt-5">
                 <Col>
                     {loading ? <div>*LOADING*</div> : null}
                     {dateInput}
                 </Col>
             </Row>
-            <Row>
+            <Row className="mt-5">
                 <Col>
                     {expenseTable}
                 </Col>
             </Row>
-            <Row>
+            <Row className="mt-5">
                 <Col>
+
                     {summary()}
                 </Col>
             </Row>

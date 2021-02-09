@@ -1,42 +1,32 @@
+:root {
+  --qd-purple: #c530c5;
+  --qd-green: #21d35d;
+}
+
 .app {
   text-align: center;
+  background-image: linear-gradient(#FFFFFF, #b8b8b8);
+  color: black;
+  font-family: "Times New Roman";
+  font-size: 1.1em;
 }
 
-.green {
-  background-color: #01cf019c;
+.google-stuff {
+  margin-left: auto;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.bg-purp {
+  background-color: var(--qd-purple);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.page-title {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: var(--qd-green);
+  text-shadow: 2px 2px 8px #cfcfcf;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.btn {
+  background-color: var(--qd-green);
+  border-radius: 8px;
 }
