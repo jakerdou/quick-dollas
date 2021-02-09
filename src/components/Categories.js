@@ -8,10 +8,12 @@ import Table from 'react-bootstrap/Table';
 
 // import './App.css';
 
+const config = require('../frontend-config.json');
+
 function Categories({ userID }) {
     const fetchCategories = () => {
         console.log('id in fetch', userID);
-        fetch("http://localhost:9000/get-categories", {
+        fetch(`http://${config.backend_url}/get-categories`, {
             method: 'POST',
             body: JSON.stringify({user_id: userID}),
             headers: {
@@ -25,7 +27,7 @@ function Categories({ userID }) {
     }
 
     const addCategory = () => {
-        fetch("http://localhost:9000/add-category", {
+        fetch(`http://${config.backend_url}/add-category`, {
             method: 'PUT',
             body: JSON.stringify(catToAdd),
             headers: {
@@ -39,7 +41,7 @@ function Categories({ userID }) {
     }
 
     const deleteCategory = (id) => {
-        fetch("http://localhost:9000/delete-category", {
+        fetch(`http://${config.backend_url}/delete-category`, {
             method: 'DELETE',
             body: JSON.stringify({id}),
             headers: {
@@ -50,7 +52,7 @@ function Categories({ userID }) {
         .then(res => res.text())
         .then(res => console.log(res))
         .catch(err => err);
-    }    
+    }
 
     const [categories, setCategories] = useState([]);
     const [catToAdd, setCatToAdd] = useState({
@@ -78,7 +80,7 @@ function Categories({ userID }) {
         setTimeout(() => {
             fetchCategories();
             console.log('not loading')
-            setLoading(false); 
+            setLoading(false);
         }, 1000);
     }
 
@@ -91,7 +93,7 @@ function Categories({ userID }) {
                     <td><Button onClick={handleDelete} id={category.id}>DELETE</Button></td>
                 </tr>
             )
-            
+
         })
     )
 
@@ -114,31 +116,31 @@ function Categories({ userID }) {
         addCategory();
         setLoading(true);
         setTimeout(() => {
-            fetchCategories(); 
-            setLoading(false); 
+            fetchCategories();
+            setLoading(false);
         }, 1000);
-        
+
     }
 
     const addCatForm = (
-        <div>
+        <div className="mt-3">
             <Form>
                 <Form.Group>
                     <Form.Label>Name</Form.Label>
                     <Form.Control
                         type="text"
-                        value={catToAdd.name} 
-                        name='name' 
+                        value={catToAdd.name}
+                        name='name'
                         onChange={handleChange}
                         placeholder="Name of category"
                     />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Type</Form.Label>
-                    <Form.Control 
+                    <Form.Control
                         as="select"
-                        value={catToAdd.is_expense} 
-                        name='is_expense' 
+                        value={catToAdd.is_expense}
+                        name='is_expense'
                         onChange={handleChange}
                     >
                         <option value={true}>Expense</option>
@@ -154,14 +156,16 @@ function Categories({ userID }) {
         <Container className='categories'>
             <Row>
                 <Col>
-                    Categories:
-                    {loading ? <div>*LOADING*</div> : null}
-                    {catTable}
+                    <div className='page-title'>Categories</div>
+                    <div className="mt-3">
+                      {loading ? <div>Loading...</div> : null}
+                      {catTable}
+                    </div>
                 </Col>
             </Row>
             <Row>
                 <Col>
-                    Add Category
+                    <div className="page-title mt-5">Add Category</div>
                     {addCatForm}
                 </Col>
             </Row>

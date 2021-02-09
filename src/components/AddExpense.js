@@ -13,12 +13,13 @@ import Button from 'react-bootstrap/Button';
 
 // import './App.css';
 
+const config = require('../frontend-config.json');
 
 function AddExpense({ userID }) {
 
     const fetchCategories = () => {
         console.log('id in fetch', userID);
-        fetch("http://localhost:9000/get-categories", {
+        fetch(`http://${config.backend_url}/get-categories`, {
             method: 'POST',
             body: JSON.stringify({user_id: userID}),
             headers: {
@@ -32,10 +33,10 @@ function AddExpense({ userID }) {
     }
 
     const addTransaction = () => {
-        fetch("http://localhost:9000/add-transaction", {
+        fetch(`http://${config.backend_url}/add-transaction`, {
             method: 'PUT',
             body: JSON.stringify({
-                trans_info: transactionInfo, 
+                trans_info: transactionInfo,
                 user_id: userID
             }),
             headers: {
@@ -85,50 +86,50 @@ function AddExpense({ userID }) {
         categories.map(category => {
             return <option key={category.id} value={category.id}>{category.name}</option>
         })
-    ) 
+    )
 
     return (
         <Container className='add-expense'>
             <Row>
                 <Col>
-                    add expense
-                    <Form>
-                        <Form.Group>
+                    <span className="page-title">Add Transaction</span>
+                    <Form className="mt-3 mx-4">
+                        <Form.Group className="mt-4">
                             <Form.Label>Amount</Form.Label>
-                            <Form.Control 
-                                type="number" 
-                                value={transactionInfo.amount} 
-                                name='amount' 
+                            <Form.Control
+                                type="number"
+                                value={transactionInfo.amount}
+                                name='amount'
                                 onChange={handleChange}
                             />
                         </Form.Group>
-                        <Form.Group>
+                        <Form.Group className="mt-4">
                             <Form.Label>Category</Form.Label>
-                            <Form.Control 
+                            <Form.Control
                                 as="select"
-                                value={transactionInfo.category} 
-                                name='category' 
+                                value={transactionInfo.category}
+                                name='category'
                                 onChange={handleChange}
                             >
                                 {categoryOptions}
                             </Form.Control>
                         </Form.Group>
-                        <Form.Group>
+                        <Form.Group className="mt-4">
                             <Form.Label>Date</Form.Label>
                             <Form.Control
                                 type="text"
-                                value={transactionInfo.date} 
-                                name='date' 
+                                value={transactionInfo.date}
+                                name='date'
                                 onChange={handleChange}
                                 placeholder="YEAR-MONTH-DAY"
                             />
                         </Form.Group>
-                        <Form.Group>
+                        <Form.Group className="mt-4">
                             <Form.Label>Description</Form.Label>
                             <Form.Control
                                 type="text"
-                                value={transactionInfo.description} 
-                                name='description' 
+                                value={transactionInfo.description}
+                                name='description'
                                 onChange={handleChange}
                                 placeholder="desc"
                             />

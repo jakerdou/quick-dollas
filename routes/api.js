@@ -1,5 +1,6 @@
 var express = require("express");
 const { Pool } = require('pg')
+const config = require('../server-config.json')
 
 
 // Router
@@ -8,10 +9,10 @@ var router = express.Router();
 // Initialize pool
 const pool = new Pool({
     user: 'postgres',
-    host: '127.0.0.1',
+    host: config.pg_host,
     database: 'quickdollas',
     password: 'J@kerd0u',
-    port: 5432,
+    port: config.pg_port,
   })
 
 // POST
